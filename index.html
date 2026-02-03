@@ -9,6 +9,13 @@
     </head>
 
     <body>
+        <div id="startup-modal" style="position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:1000;">
+            <div style="background:white;padding:2em;border-radius:8px;box-shadow:0 2px 8px #000;min-width:300px;text-align:center;">
+                <h2>Choose Number of Decks</h2>
+                <input id="num-decks-input" type="number" min="1" max="8" value="1" style="width:60px;font-size:1.2em;"> 
+                <button id="start-game-btn" style="font-size:1.1em;margin-left:1em;">Start Game</button>
+            </div>
+        </div>
         <h2>Dealer: <span id="dealer-sum"></span></h2>
         <div id="dealer-cards">
             <img id="hidden" src="./cards/BACK.png">

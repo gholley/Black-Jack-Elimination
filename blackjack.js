@@ -7,13 +7,21 @@ let yourAceCount = 0;
 
 let hidden;
 let deck;
+let numDecks = 1;
 
 let canHit = true; //allows the player (you) to draw while yourSum <= 21
 
 window.onload = function() {
-    buildDeck();
-    shuffleDeck();
-    startGame();
+    // Show modal to select number of decks
+    document.getElementById("startup-modal").style.display = "flex";
+    document.getElementById("start-game-btn").onclick = function() {
+        let input = document.getElementById("num-decks-input").value;
+        numDecks = Math.max(1, Math.min(8, parseInt(input) || 1));
+        document.getElementById("startup-modal").style.display = "none";
+        buildDeck();
+        shuffleDeck();
+        startGame();
+    };
 }
 
 function buildDeck() {
@@ -21,9 +29,11 @@ function buildDeck() {
     let types = ["C", "D", "H", "S"];
     deck = [];
 
-    for (let i = 0; i < types.length; i++) {
-        for (let j = 0; j < values.length; j++) {
-            deck.push(values[j] + "-" + types[i]); //A-C -> K-C, A-D -> K-D
+    for (let d = 0; d < numDecks; d++) {
+        for (let i = 0; i < types.length; i++) {
+            for (let j = 0; j < values.length; j++) {
+                deck.push(values[j] + "-" + types[i]); //A-C -> K-C, A-D -> K-D
+            }
         }
     }
     // console.log(deck);
