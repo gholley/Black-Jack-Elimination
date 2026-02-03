@@ -5,18 +5,22 @@ let yourSum = 0;
 let dealerAceCount = 0;
 let yourAceCount = 0; 
 
+
 let hidden;
 let deck;
 let numDecks = 1;
+let numPlayers = 1;
 
 let canHit = true; //allows the player (you) to draw while yourSum <= 21
 
 window.onload = function() {
-    // Show modal to select number of decks
+    // Show modal to select number of decks and players
     document.getElementById("startup-modal").style.display = "flex";
     document.getElementById("start-game-btn").onclick = function() {
-        let input = document.getElementById("num-decks-input").value;
-        numDecks = Math.max(1, Math.min(8, parseInt(input) || 1));
+        let decksInput = document.getElementById("num-decks-input").value;
+        let playersInput = document.getElementById("num-players-input").value;
+        numDecks = Math.max(1, Math.min(8, parseInt(decksInput) || 1));
+        numPlayers = Math.max(1, Math.min(7, parseInt(playersInput) || 1));
         document.getElementById("startup-modal").style.display = "none";
         buildDeck();
         shuffleDeck();
