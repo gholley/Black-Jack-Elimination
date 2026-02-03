@@ -48,26 +48,20 @@ function buildDeck() {
     function startGame() {
         // Clear previous hands if any
         document.getElementById("dealer-cards").innerHTML = '<img id="hidden" src="./cards/BACK.png">';
-        document.getElementById("players-area").innerHTML = "";
+        const playersRow = document.getElementById("players-row");
+        playersRow.innerHTML = "";
 
-        // Render player seats in horseshoe
-        const playersArea = document.getElementById("players-area");
-        const rect = playersArea.getBoundingClientRect();
-        const centerX = rect.width / 2;
-        const centerY = rect.height * 0.85;
-        const radius = Math.min(centerX, centerY) * 0.85;
-        const angleStart = Math.PI * 0.8;
-        const angleEnd = Math.PI * 2.2;
+        // Render player seats in a straight row with separators
         for (let p = 0; p < numPlayers; p++) {
-            const angle = angleStart + (angleEnd - angleStart) * (p / (numPlayers - 1 || 1));
-            const x = centerX + radius * Math.cos(angle);
-            const y = centerY + radius * Math.sin(angle);
+            if (p > 0) {
+                const sep = document.createElement("div");
+                sep.className = "player-separator";
+                playersRow.appendChild(sep);
+            }
             const seat = document.createElement("div");
             seat.className = "player-seat";
-            seat.style.left = `${x - 60}px`;
-            seat.style.top = `${y - 40}px`;
             seat.innerHTML = `<div class=\"player-name\">${playerNames[p]}</div><div class=\"player-cards\" id=\"player-cards-${p}\"></div><div class=\"player-sum\" id=\"player-sum-${p}\"></div>`;
-            playersArea.appendChild(seat);
+            playersRow.appendChild(seat);
         }
 
         // Dealer logic
