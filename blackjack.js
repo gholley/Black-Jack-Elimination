@@ -10,6 +10,7 @@ let hidden;
 let deck;
 let numDecks = 1;
 let numPlayers = 1;
+let playerNames = [];
 
 let canHit = true; //allows the player (you) to draw while yourSum <= 21
 
@@ -21,6 +22,11 @@ window.onload = function() {
         let playersInput = document.getElementById("num-players-input").value;
         numDecks = Math.max(1, Math.min(8, parseInt(decksInput) || 1));
         numPlayers = Math.max(1, Math.min(7, parseInt(playersInput) || 1));
+        // Generate player names: Player 1, Player 2, ...
+        playerNames = [];
+        for (let i = 1; i <= numPlayers; i++) {
+            playerNames.push("Player " + i);
+        }
         document.getElementById("startup-modal").style.display = "none";
         buildDeck();
         shuffleDeck();
@@ -54,13 +60,36 @@ function shuffleDeck() {
 }
 
 function startGame() {
+    // Clear previous hands if any
+    document.getElementById("dealer-cards").innerHTML = '<img id="hidden" src="./cards/BACK.png">';
+    document.getElementById("players-area").innerHTML = "";
+
+    // Render player seats in horseshoe
+    const playersArea = document.getElementById("players-area");
+    const centerX = playersArea.offsetWidth / 2;
+    const centerY = playersArea.offsetHeight * 0.85;
+    const radius = Math.min(centerX, centerY) * 0.85;
+    const angleStart = Math.PI * 0.8;
+    const angleEnd = Math.PI * 2.2;
+    for (let p = 0; p < numPlayers; p++) {
+        const angle = angleStart + (angleEnd - angleStart) * (p / (numPlayers - 1 || 1));
+        const x = centerX + radius * Math.cos(angle);
+        const y = centerY + radius * Math.sin(angle);
+        const seat = document.createElement("div");
+        seat.className = "player-seat";
+        seat.style.left = `calc(${(x / playersArea.offsetWidth) * 100}% - 60px)`;
+        seat.style.top = `calc(${(y / playersArea.offsetHeight) * 100}% - 40px)`;
+        seat.innerHTML = `<div class="player-name">${playerNames[p]}</div><div class="player-cards" id="player-cards-${p}"></div><div class="player-sum" id="player-sum-${p}"></div>`;
+        playersArea.appendChild(seat);
+    }
+
+    // Dealer logic
     hidden = deck.pop();
+    dealerSum = 0;
+    dealerAceCount = 0;
     dealerSum += getValue(hidden);
     dealerAceCount += checkAce(hidden);
-    // console.log(hidden);
-    // console.log(dealerSum);
     while (dealerSum < 17) {
-        //<img src="./cards/4-C.png">
         let cardImg = document.createElement("img");
         let card = deck.pop();
         cardImg.src = "./cards/" + card + ".png";
@@ -68,21 +97,23 @@ function startGame() {
         dealerAceCount += checkAce(card);
         document.getElementById("dealer-cards").append(cardImg);
     }
-    console.log(dealerSum);
 
+    // For now, deal 2 cards to Player 1 only (for compatibility)
+    // Later, update to deal to all players
+    let yourSum = 0;
+    let yourAceCount = 0;
     for (let i = 0; i < 2; i++) {
         let cardImg = document.createElement("img");
         let card = deck.pop();
         cardImg.src = "./cards/" + card + ".png";
         yourSum += getValue(card);
         yourAceCount += checkAce(card);
-        document.getElementById("your-cards").append(cardImg);
+        document.getElementById("player-cards-0").append(cardImg);
     }
+    document.getElementById("player-sum-0").textContent = `Sum: ${yourSum}`;
 
-    console.log(yourSum);
     document.getElementById("hit").addEventListener("click", hit);
     document.getElementById("stay").addEventListener("click", stay);
-
 }
 
 function hit() {

@@ -19,14 +19,17 @@
                 <button id="start-game-btn" style="font-size:1.1em;margin-left:1em;">Start Game</button>
             </div>
         </div>
-        <h2>Dealer: <span id="dealer-sum"></span></h2>
-        <div id="dealer-cards">
-            <img id="hidden" src="./cards/BACK.png">
+        <div id="table-area">
+            <div id="dealer-area">
+                <h2>Dealer: <span id="dealer-sum"></span></h2>
+                <div id="dealer-cards">
+                    <img id="hidden" src="./cards/BACK.png">
+                </div>
+            </div>
+            <div id="players-area">
+                <!-- Player hands will be dynamically inserted here in a horseshoe shape -->
+            </div>
         </div>
-
-        <h2>You: <span id="your-sum"></span></h2>
-        <div id="your-cards"></div>
-
         <br>
         <button id="hit">Hit</button>
         <button id="stay">Stay</button>
