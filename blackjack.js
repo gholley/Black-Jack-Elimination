@@ -287,7 +287,10 @@ function startGame() {
             }
             results += `<span class='${resultClass}'>${playerNames[p]}: ${msg}</span> `;
         }
-        document.getElementById("results").innerText = results;
+        const resultsElem = document.getElementById("results");
+        if (resultsElem) {
+            resultsElem.innerText = results;
+        }
         // Show Next Round button
         const nextBtn = document.getElementById("next-round");
         if (nextBtn) {
