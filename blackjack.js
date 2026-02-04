@@ -306,7 +306,8 @@ function startGame() {
         const nextBtn = document.getElementById("next-round");
         if (nextBtn) nextBtn.style.display = "none";
         // Clear results
-        document.getElementById("results").innerText = "";
+        const resultsElem = document.getElementById("results");
+        if (resultsElem) resultsElem.innerText = "";
         // Remove seat highlights
         for (let p = 0; p < numPlayers; p++) {
             const seatElem = document.getElementById(`player-cards-${p}`)?.parentElement;
