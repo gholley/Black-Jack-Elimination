@@ -288,6 +288,35 @@ function startGame() {
             results += `<span class='${resultClass}'>${playerNames[p]}: ${msg}</span> `;
         }
         document.getElementById("results").innerText = results;
+        // Show Next Round button
+        const nextBtn = document.getElementById("next-round");
+        if (nextBtn) {
+            nextBtn.style.display = "inline-block";
+        }
+        // Next Round button handler
+        document.getElementById("next-round").onclick = function() {
+            resetRound();
+        };
+    // Reset for a new round, keeping player names and settings
+    function resetRound() {
+        // Hide Next Round button
+        const nextBtn = document.getElementById("next-round");
+        if (nextBtn) nextBtn.style.display = "none";
+        // Clear results
+        document.getElementById("results").innerText = "";
+        // Remove seat highlights
+        for (let p = 0; p < numPlayers; p++) {
+            const seatElem = document.getElementById(`player-cards-${p}`)?.parentElement;
+            if (seatElem) {
+                seatElem.classList.remove("seat-result-win", "seat-result-bust", "seat-result-tie", "seat-result-lose");
+            }
+        }
+        // Rebuild and shuffle deck
+        buildDeck();
+        shuffleDeck();
+        // Start new round
+        startGame();
+    }
     }
     // ...removed legacy single-player dealing code...
 
