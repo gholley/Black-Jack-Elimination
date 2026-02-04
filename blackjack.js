@@ -74,6 +74,9 @@ function buildDeck() {
             let cardImg = document.createElement("img");
             let card = deck.pop();
             cardImg.src = "./cards/" + card + ".png";
+            cardImg.onerror = function() {
+                this.src = "./cards/BACK.png";
+            };
             dealerSum += getValue(card);
             dealerAceCount += checkAce(card);
             document.getElementById("dealer-cards").append(cardImg);
@@ -90,6 +93,9 @@ function buildDeck() {
                 let cardImg = document.createElement("img");
                 let card = deck.pop();
                 cardImg.src = "./cards/" + card + ".png";
+                cardImg.onerror = function() {
+                    this.src = "./cards/BACK.png";
+                };
                 sum += getValue(card);
                 aceCount += checkAce(card);
                 document.getElementById(`player-cards-${p}`).append(cardImg);
@@ -126,6 +132,9 @@ function buildDeck() {
         let cardImg = document.createElement("img");
         let card = deck.pop();
         cardImg.src = "./cards/" + card + ".png";
+        cardImg.onerror = function() {
+            this.src = "./cards/BACK.png";
+        };
         playerSums[currentPlayer] += getValue(card);
         playerAceCounts[currentPlayer] += checkAce(card);
         document.getElementById(`player-cards-${currentPlayer}`).append(cardImg);
