@@ -254,22 +254,29 @@ function startGame() {
             dealerSumElem.innerHTML = `${dealerSum} <span class='${dealerClass}'>(${dealerResult})</span>`;
         }
 
+        // Track which players continue
+        let nextRoundPlayers = [];
+        let nextRoundNames = [];
         for (let p = 0; p < numPlayers; p++) {
             let sum = reduceAce(playerSums[p], playerAceCounts[p]);
             let msg = "";
             let resultClass = "";
+            let continueNext = false;
             if (sum > 21) {
                 msg = "Bust!";
                 resultClass = "result-bust";
             } else if (dealerSum > 21) {
                 msg = "Win!";
                 resultClass = "result-win";
+                continueNext = true;
             } else if (sum === dealerSum) {
                 msg = "Tie!";
                 resultClass = "result-tie";
+                continueNext = true;
             } else if (sum > dealerSum) {
                 msg = "Win!";
                 resultClass = "result-win";
+                continueNext = true;
             } else {
                 msg = "Lose!";
                 resultClass = "result-lose";
@@ -286,7 +293,13 @@ function startGame() {
                 seatElem.classList.add(`seat-${resultClass}`);
             }
             results += `<span class='${resultClass}'>${playerNames[p]}: ${msg}</span> `;
+            if (continueNext) {
+                nextRoundPlayers.push(p);
+                nextRoundNames.push(playerNames[p]);
+            }
         }
+        // Store next round names for resetRound
+        window._nextRoundNames = nextRoundNames;
         const resultsElem = document.getElementById("results");
         if (resultsElem) {
             resultsElem.innerText = results;
@@ -314,6 +327,11 @@ function startGame() {
             if (seatElem) {
                 seatElem.classList.remove("seat-result-win", "seat-result-bust", "seat-result-tie", "seat-result-lose");
             }
+        }
+        // Update playerNames and numPlayers for next round
+        if (window._nextRoundNames && window._nextRoundNames.length > 0) {
+            playerNames = window._nextRoundNames;
+            numPlayers = playerNames.length;
         }
         // Rebuild and shuffle deck
         buildDeck();
