@@ -332,12 +332,16 @@ function startGame() {
         if (window._nextRoundNames && window._nextRoundNames.length > 0) {
             playerNames = window._nextRoundNames;
             numPlayers = playerNames.length;
+            // Rebuild and shuffle deck
+            buildDeck();
+            shuffleDeck();
+            // Start new round
+            startGame();
+        } else {
+            // Show game over banner
+            const banner = document.getElementById("game-over-banner");
+            if (banner) banner.style.display = "flex";
         }
-        // Rebuild and shuffle deck
-        buildDeck();
-        shuffleDeck();
-        // Start new round
-        startGame();
     }
     }
     // ...removed legacy single-player dealing code...
