@@ -321,6 +321,9 @@ function startGame() {
         // Clear results
         const resultsElem = document.getElementById("results");
         if (resultsElem) resultsElem.innerText = "";
+        // Clear dealer's sum and results
+        const dealerSumElem = document.getElementById("dealer-sum");
+        if (dealerSumElem) dealerSumElem.innerHTML = "";
         // Remove seat highlights
         for (let p = 0; p < numPlayers; p++) {
             const seatElem = document.getElementById(`player-cards-${p}`)?.parentElement;
