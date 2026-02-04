@@ -41,15 +41,41 @@ let currentPlayer = 0;
 window.onload = function() {
     // Show modal to select number of decks and players
     document.getElementById("startup-modal").style.display = "flex";
+    // Show/hide player name inputs when number of players changes
+    const numPlayersInput = document.getElementById("num-players-input");
+    numPlayersInput.oninput = function() {
+        let n = Math.max(1, Math.min(7, parseInt(numPlayersInput.value) || 1));
+        const namesArea = document.getElementById("player-names-area");
+        namesArea.innerHTML = "";
+        for (let i = 1; i <= n; i++) {
+            const label = document.createElement("label");
+            label.textContent = `Player ${i} Name:`;
+            label.setAttribute("for", `player-name-input-${i}`);
+            label.style.marginRight = "0.5em";
+            const input = document.createElement("input");
+            input.type = "text";
+            input.id = `player-name-input-${i}`;
+            input.value = `Player ${i}`;
+            input.style.marginBottom = "0.5em";
+            input.style.fontSize = "1em";
+            namesArea.appendChild(label);
+            namesArea.appendChild(input);
+            namesArea.appendChild(document.createElement("br"));
+        }
+    };
+    numPlayersInput.oninput(); // initialize on load
+
     document.getElementById("start-game-btn").onclick = function() {
         let decksInput = document.getElementById("num-decks-input").value;
         let playersInput = document.getElementById("num-players-input").value;
         numDecks = Math.max(1, Math.min(8, parseInt(decksInput) || 1));
         numPlayers = Math.max(1, Math.min(7, parseInt(playersInput) || 1));
-        // Generate player names: Player 1, Player 2, ...
+        // Get player names from inputs
         playerNames = [];
         for (let i = 1; i <= numPlayers; i++) {
-            playerNames.push("Player " + i);
+            let nameInput = document.getElementById(`player-name-input-${i}`);
+            let name = nameInput && nameInput.value.trim() ? nameInput.value.trim() : `Player ${i}`;
+            playerNames.push(name);
         }
         document.getElementById("startup-modal").style.display = "none";
         buildDeck();
