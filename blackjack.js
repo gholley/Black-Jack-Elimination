@@ -72,25 +72,22 @@ function startGame() {
         playersRow.appendChild(seat);
     }
 
-    // Dealer logic
-    hidden = deck.pop();
-    dealerSum = 0;
-    dealerAceCount = 0;
-    dealerSum += getValue(hidden);
-    dealerAceCount += checkAce(hidden);
-    while (dealerSum < 17) {
-        let cardImg = document.createElement("img");
-        let card = deck.pop();
-        cardImg.src = "./cards/" + card + ".png";
-        cardImg.alt = card + " card";
-        cardImg.onerror = function() {
-            this.src = "./cards/BACK.png";
-            this.alt = "Card back";
-        };
-        dealerSum += getValue(card);
-        dealerAceCount += checkAce(card);
-        document.getElementById("dealer-cards").append(cardImg);
-    }
+    // Dealer logic: deal two cards, one hidden
+    hidden = deck.pop(); // face down
+    let visible = deck.pop(); // face up
+    dealerSum = getValue(hidden) + getValue(visible);
+    dealerAceCount = checkAce(hidden) + checkAce(visible);
+    // Show hidden card (face down)
+    document.getElementById("dealer-cards").innerHTML = `<img id='hidden' src='./cards/BACK.png' alt='Hidden card'>`;
+    // Show visible card (face up)
+    let cardImg = document.createElement("img");
+    cardImg.src = "./cards/" + visible + ".png";
+    cardImg.alt = visible + " card";
+    cardImg.onerror = function() {
+        this.src = "./cards/BACK.png";
+        this.alt = "Card back";
+    };
+    document.getElementById("dealer-cards").append(cardImg);
 
     // Deal 2 cards to each player
     playerSums = [];
@@ -187,9 +184,32 @@ function startGame() {
             }
         }
         if (!found) {
-            // All players done, reveal dealer and show results
-            endRound();
+            // All players done, dealer's turn
+            dealerTurn();
         }
+    function dealerTurn() {
+        // Reveal hidden card
+        const hiddenImg = document.getElementById("hidden");
+        if (hiddenImg) {
+            hiddenImg.src = "./cards/" + hidden + ".png";
+            hiddenImg.alt = hidden + " card";
+        }
+        // Dealer draws until 17 or higher
+        while (reduceAce(dealerSum, dealerAceCount) < 17) {
+            let card = deck.pop();
+            let cardImg = document.createElement("img");
+            cardImg.src = "./cards/" + card + ".png";
+            cardImg.alt = card + " card";
+            cardImg.onerror = function() {
+                this.src = "./cards/BACK.png";
+                this.alt = "Card back";
+            };
+            dealerSum += getValue(card);
+            dealerAceCount += checkAce(card);
+            document.getElementById("dealer-cards").append(cardImg);
+        }
+        endRound();
+    }
     }
 
     function endRound() {
