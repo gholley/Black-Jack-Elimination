@@ -112,7 +112,7 @@ function startGame() {
         playerSums.push(sum);
         playerAceCounts.push(aceCount);
         playerActive.push(true);
-        document.getElementById(`player-sum-${p}`).textContent = `Sum: ${sum}`;
+        document.getElementById(`player-sum-${p}`).textContent = `Sum: ${reduceAce(sum, aceCount)}`;
     }
 
     // Disable buttons during dealing
@@ -158,7 +158,7 @@ function startGame() {
         playerSums[currentPlayer] += getValue(card);
         playerAceCounts[currentPlayer] += checkAce(card);
         document.getElementById(`player-cards-${currentPlayer}`).append(cardImg);
-        document.getElementById(`player-sum-${currentPlayer}`).textContent = `Sum: ${playerSums[currentPlayer]}`;
+        document.getElementById(`player-sum-${currentPlayer}`).textContent = `Sum: ${reduceAce(playerSums[currentPlayer], playerAceCounts[currentPlayer])}`;
         if (reduceAce(playerSums[currentPlayer], playerAceCounts[currentPlayer]) > 21) {
             playerActive[currentPlayer] = false;
             nextPlayer();
