@@ -1,3 +1,22 @@
+// Helper to create a card image element
+function createCardImg(card) {
+    let cardImg = document.createElement("img");
+    cardImg.src = "./cards/" + card + ".png";
+    cardImg.alt = card + " card";
+    cardImg.onerror = function() {
+        this.src = "./cards/BACK.png";
+        this.alt = "Card back";
+    };
+    return cardImg;
+}
+
+// Helper to display a player's sum
+function displayPlayerSum(playerIdx) {
+    const sumElem = document.getElementById(`player-sum-${playerIdx}`);
+    if (sumElem) {
+        sumElem.textContent = `Sum: ${reduceAce(playerSums[playerIdx], playerAceCounts[playerIdx])}`;
+    }
+}
 function shuffleDeck() {
     for (let i = deck.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -80,14 +99,7 @@ function startGame() {
     // Show hidden card (face down)
     document.getElementById("dealer-cards").innerHTML = `<img id='hidden' src='./cards/BACK.png' alt='Hidden card'>`;
     // Show visible card (face up)
-    let cardImg = document.createElement("img");
-    cardImg.src = "./cards/" + visible + ".png";
-    cardImg.alt = visible + " card";
-    cardImg.onerror = function() {
-        this.src = "./cards/BACK.png";
-        this.alt = "Card back";
-    };
-    document.getElementById("dealer-cards").append(cardImg);
+    document.getElementById("dealer-cards").append(createCardImg(visible));
 
     // Deal 2 cards to each player
     playerSums = [];
@@ -97,14 +109,8 @@ function startGame() {
         let sum = 0;
         let aceCount = 0;
         for (let i = 0; i < 2; i++) {
-            let cardImg = document.createElement("img");
             let card = deck.pop();
-            cardImg.src = "./cards/" + card + ".png";
-            cardImg.alt = card + " card";
-            cardImg.onerror = function() {
-                this.src = "./cards/BACK.png";
-                this.alt = "Card back";
-            };
+            let cardImg = createCardImg(card);
             sum += getValue(card);
             aceCount += checkAce(card);
             document.getElementById(`player-cards-${p}`).append(cardImg);
@@ -112,7 +118,7 @@ function startGame() {
         playerSums.push(sum);
         playerAceCounts.push(aceCount);
         playerActive.push(true);
-        document.getElementById(`player-sum-${p}`).textContent = `Sum: ${reduceAce(sum, aceCount)}`;
+        displayPlayerSum(p);
     }
 
     // Disable buttons during dealing
@@ -147,18 +153,12 @@ function startGame() {
 
     function hit() {
         if (!playerActive[currentPlayer]) return;
-        let cardImg = document.createElement("img");
         let card = deck.pop();
-        cardImg.src = "./cards/" + card + ".png";
-        cardImg.alt = card + " card";
-        cardImg.onerror = function() {
-            this.src = "./cards/BACK.png";
-            this.alt = "Card back";
-        };
+        let cardImg = createCardImg(card);
         playerSums[currentPlayer] += getValue(card);
         playerAceCounts[currentPlayer] += checkAce(card);
         document.getElementById(`player-cards-${currentPlayer}`).append(cardImg);
-        document.getElementById(`player-sum-${currentPlayer}`).textContent = `Sum: ${reduceAce(playerSums[currentPlayer], playerAceCounts[currentPlayer])}`;
+        displayPlayerSum(currentPlayer);
         if (reduceAce(playerSums[currentPlayer], playerAceCounts[currentPlayer]) > 21) {
             playerActive[currentPlayer] = false;
             nextPlayer();
@@ -197,13 +197,7 @@ function startGame() {
         // Dealer draws until 17 or higher
         while (reduceAce(dealerSum, dealerAceCount) < 17) {
             let card = deck.pop();
-            let cardImg = document.createElement("img");
-            cardImg.src = "./cards/" + card + ".png";
-            cardImg.alt = card + " card";
-            cardImg.onerror = function() {
-                this.src = "./cards/BACK.png";
-                this.alt = "Card back";
-            };
+            let cardImg = createCardImg(card);
             dealerSum += getValue(card);
             dealerAceCount += checkAce(card);
             document.getElementById("dealer-cards").append(cardImg);
