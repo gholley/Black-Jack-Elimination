@@ -51,32 +51,55 @@ function buildDeck() {
             }
         }
     }
-    function startGame() {
-        // Clear previous hands if any
-        document.getElementById("dealer-cards").innerHTML = '<img id="hidden" src="./cards/BACK.png">';
-        const playersRow = document.getElementById("players-row");
-        playersRow.innerHTML = "";
+}
 
-        // Render player seats in a straight row with separators
-        for (let p = 0; p < numPlayers; p++) {
-            if (p > 0) {
-                const sep = document.createElement("div");
-                sep.className = "player-separator";
-                playersRow.appendChild(sep);
-            }
-            const seat = document.createElement("div");
-            seat.className = "player-seat";
-            seat.innerHTML = `<div class=\"player-name\">${playerNames[p]}</div><div class=\"player-cards\" id=\"player-cards-${p}\"></div><div class=\"player-sum\" id=\"player-sum-${p}\"></div>`;
-            playersRow.appendChild(seat);
+function startGame() {
+    // Clear previous hands if any
+    document.getElementById("dealer-cards").innerHTML = '<img id="hidden" src="./cards/BACK.png">';
+    const playersRow = document.getElementById("players-row");
+    playersRow.innerHTML = "";
+
+    // Render player seats in a straight row with separators
+    for (let p = 0; p < numPlayers; p++) {
+        if (p > 0) {
+            const sep = document.createElement("div");
+            sep.className = "player-separator";
+            playersRow.appendChild(sep);
         }
+        const seat = document.createElement("div");
+        seat.className = "player-seat";
+        seat.innerHTML = `<div class=\"player-name\">${playerNames[p]}</div><div class=\"player-cards\" id=\"player-cards-${p}\"></div><div class=\"player-sum\" id=\"player-sum-${p}\"></div>`;
+        playersRow.appendChild(seat);
+    }
 
-        // Dealer logic
-        hidden = deck.pop();
-        dealerSum = 0;
-        dealerAceCount = 0;
-        dealerSum += getValue(hidden);
-        dealerAceCount += checkAce(hidden);
-        while (dealerSum < 17) {
+    // Dealer logic
+    hidden = deck.pop();
+    dealerSum = 0;
+    dealerAceCount = 0;
+    dealerSum += getValue(hidden);
+    dealerAceCount += checkAce(hidden);
+    while (dealerSum < 17) {
+        let cardImg = document.createElement("img");
+        let card = deck.pop();
+        cardImg.src = "./cards/" + card + ".png";
+        cardImg.alt = card + " card";
+        cardImg.onerror = function() {
+            this.src = "./cards/BACK.png";
+            this.alt = "Card back";
+        };
+        dealerSum += getValue(card);
+        dealerAceCount += checkAce(card);
+        document.getElementById("dealer-cards").append(cardImg);
+    }
+
+    // Deal 2 cards to each player
+    playerSums = [];
+    playerAceCounts = [];
+    playerActive = [];
+    for (let p = 0; p < numPlayers; p++) {
+        let sum = 0;
+        let aceCount = 0;
+        for (let i = 0; i < 2; i++) {
             let cardImg = document.createElement("img");
             let card = deck.pop();
             cardImg.src = "./cards/" + card + ".png";
@@ -85,51 +108,30 @@ function buildDeck() {
                 this.src = "./cards/BACK.png";
                 this.alt = "Card back";
             };
-            dealerSum += getValue(card);
-            dealerAceCount += checkAce(card);
-            document.getElementById("dealer-cards").append(cardImg);
+            sum += getValue(card);
+            aceCount += checkAce(card);
+            document.getElementById(`player-cards-${p}`).append(cardImg);
         }
-
-        // Deal 2 cards to each player
-        playerSums = [];
-        playerAceCounts = [];
-        playerActive = [];
-        for (let p = 0; p < numPlayers; p++) {
-            let sum = 0;
-            let aceCount = 0;
-            for (let i = 0; i < 2; i++) {
-                let cardImg = document.createElement("img");
-                let card = deck.pop();
-                cardImg.src = "./cards/" + card + ".png";
-                cardImg.alt = card + " card";
-                cardImg.onerror = function() {
-                    this.src = "./cards/BACK.png";
-                    this.alt = "Card back";
-                };
-                sum += getValue(card);
-                aceCount += checkAce(card);
-                document.getElementById(`player-cards-${p}`).append(cardImg);
-            }
-            playerSums.push(sum);
-            playerAceCounts.push(aceCount);
-            playerActive.push(true);
-            document.getElementById(`player-sum-${p}`).textContent = `Sum: ${sum}`;
-        }
-
-        // Disable buttons during dealing
-        document.getElementById("hit").disabled = true;
-        document.getElementById("stay").disabled = true;
-
-        currentPlayer = 0;
-        updatePlayerTurnUI();
-        document.getElementById("hit").onclick = hit;
-        document.getElementById("stay").onclick = stay;
-
-        // Enable buttons after a short delay to ensure all cards are displayed
-        setTimeout(() => {
-            updatePlayerTurnUI();
-        }, 300);
+        playerSums.push(sum);
+        playerAceCounts.push(aceCount);
+        playerActive.push(true);
+        document.getElementById(`player-sum-${p}`).textContent = `Sum: ${sum}`;
     }
+
+    // Disable buttons during dealing
+    document.getElementById("hit").disabled = true;
+    document.getElementById("stay").disabled = true;
+
+    currentPlayer = 0;
+    updatePlayerTurnUI();
+    document.getElementById("hit").onclick = hit;
+    document.getElementById("stay").onclick = stay;
+
+    // Enable buttons after a short delay to ensure all cards are displayed
+    setTimeout(() => {
+        updatePlayerTurnUI();
+    }, 300);
+}
 
     function updatePlayerTurnUI() {
         // Highlight current player
@@ -215,7 +217,7 @@ function buildDeck() {
         document.getElementById("results").innerText = results;
     }
     // ...removed legacy single-player dealing code...
-}
+
 
 function hit() {
     if (!canHit) {
