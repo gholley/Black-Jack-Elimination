@@ -279,6 +279,12 @@ function startGame() {
             if (sumElem) {
                 sumElem.innerHTML = `Sum: ${sum} <span class='${resultClass}'>(${msg})</span>`;
             }
+            // Highlight player seat with result color
+            const seatElem = document.getElementById(`player-cards-${p}`)?.parentElement;
+            if (seatElem) {
+                seatElem.classList.remove("seat-result-win", "seat-result-bust", "seat-result-tie", "seat-result-lose");
+                seatElem.classList.add(`seat-${resultClass}`);
+            }
             results += `<span class='${resultClass}'>${playerNames[p]}: ${msg}</span> `;
         }
         document.getElementById("results").innerText = results;
