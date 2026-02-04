@@ -68,17 +68,15 @@ body {
     text-align: center;
 }
 
-#dealer-cards img {
-    height: 175px;
+/* Ensure all card images are the same size */
+#dealer-cards img,
+.player-cards img {
     width: 125px;
+    height: 175px;
+    object-fit: contain;
     margin: 1px;
 }
 
-#your-cards img {
-    height: 175px;
-    width: 125px;
-    margin: 1px;
-}
 
 #hit {
     width: 100px;
