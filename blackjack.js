@@ -106,10 +106,19 @@ function buildDeck() {
             document.getElementById(`player-sum-${p}`).textContent = `Sum: ${sum}`;
         }
 
+        // Disable buttons during dealing
+        document.getElementById("hit").disabled = true;
+        document.getElementById("stay").disabled = true;
+
         currentPlayer = 0;
         updatePlayerTurnUI();
         document.getElementById("hit").onclick = hit;
         document.getElementById("stay").onclick = stay;
+
+        // Enable buttons after a short delay to ensure all cards are displayed
+        setTimeout(() => {
+            updatePlayerTurnUI();
+        }, 300);
     }
 
     function updatePlayerTurnUI() {
