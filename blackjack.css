@@ -1,14 +1,14 @@
 .seat-result-win {
-    box-shadow: 0 0 16px 4px #2ecc40, 0 2px 8px #0002;
+    box-shadow: 0 0 16px 4px #2ecc40, 0 2px 8px #0002 !important;
 }
 .seat-result-bust {
-    box-shadow: 0 0 16px 4px #e74c3c, 0 2px 8px #0002;
+    box-shadow: 0 0 16px 4px #e74c3c, 0 2px 8px #0002 !important;
 }
 .seat-result-tie {
-    box-shadow: 0 0 16px 4px #f1c40f, 0 2px 8px #0002;
+    box-shadow: 0 0 16px 4px #f1c40f, 0 2px 8px #0002 !important;
 }
 .seat-result-lose {
-    box-shadow: 0 0 16px 4px #3498db, 0 2px 8px #0002;
+    box-shadow: 0 0 16px 4px #3498db, 0 2px 8px #0002 !important;
 }
 #results {
     font-size: 1.3em;
