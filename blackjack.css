@@ -1,3 +1,27 @@
+#results {
+    font-size: 1.3em;
+    font-weight: bold;
+    color: #2ecc40;
+    text-shadow: 0 2px 8px #0004;
+    margin-top: 1em;
+}
+
+.player-sum, #dealer-sum {
+    font-weight: bold;
+}
+
+.result-win {
+    color: #2ecc40;
+}
+.result-bust {
+    color: #e74c3c;
+}
+.result-tie {
+    color: #f1c40f;
+}
+.result-lose {
+    color: #3498db;
+}
 #table-area {
     width: 100vw;
     height: 60vh;

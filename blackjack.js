@@ -200,37 +200,46 @@ function startGame() {
         let results = "";
         // Dealer result logic
         let dealerResult = "";
+        let dealerClass = "";
         if (dealerSum > 21) {
             dealerResult = "Bust!";
+            dealerClass = "result-bust";
         } else {
             dealerResult = `Sum: ${dealerSum}`;
+            dealerClass = "result-win";
         }
         // Display dealer sum and result
         const dealerSumElem = document.getElementById("dealer-sum");
         if (dealerSumElem) {
-            dealerSumElem.textContent = `${dealerSum} (${dealerResult})`;
+            dealerSumElem.innerHTML = `${dealerSum} <span class='${dealerClass}'>(${dealerResult})</span>`;
         }
 
         for (let p = 0; p < numPlayers; p++) {
             let sum = reduceAce(playerSums[p], playerAceCounts[p]);
             let msg = "";
+            let resultClass = "";
             if (sum > 21) {
                 msg = "Bust!";
+                resultClass = "result-bust";
             } else if (dealerSum > 21) {
                 msg = "Win!";
+                resultClass = "result-win";
             } else if (sum === dealerSum) {
                 msg = "Tie!";
+                resultClass = "result-tie";
             } else if (sum > dealerSum) {
                 msg = "Win!";
+                resultClass = "result-win";
             } else {
                 msg = "Lose!";
+                resultClass = "result-lose";
             }
-            // Display result next to player's sum
+            // Display result next to player's sum with vibrant color
             const sumElem = document.getElementById(`player-sum-${p}`);
             if (sumElem) {
-                sumElem.textContent = `Sum: ${sum} (${msg})`;
+                sumElem.innerHTML = `Sum: ${sum} <span class='${resultClass}'>(${msg})</span>`;
             }
-            results += `${playerNames[p]}: ${msg} `;
+            results += `<span class='${resultClass}'>${playerNames[p]}: ${msg}</span> `;
         }
         document.getElementById("results").innerText = results;
     }
