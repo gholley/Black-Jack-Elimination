@@ -13,7 +13,7 @@ let numDecks = 1;
 let numPlayers = 1;
 let playerNames = [];
 
-// Per-player state
+// Multiplayer state
 let playerSums = [];
 let playerAceCounts = [];
 let playerActive = [];
@@ -219,53 +219,7 @@ function startGame() {
     // ...removed legacy single-player dealing code...
 
 
-function hit() {
-    if (!canHit) {
-        return;
-    }
-
-    let cardImg = document.createElement("img");
-    let card = deck.pop();
-    cardImg.src = "./cards/" + card + ".png";
-    yourSum += getValue(card);
-    yourAceCount += checkAce(card);
-    document.getElementById("your-cards").append(cardImg);
-
-    if (reduceAce(yourSum, yourAceCount) > 21) { //A, J, 8 -> 1 + 10 + 8
-        canHit = false;
-    }
-
-}
-
-function stay() {
-    dealerSum = reduceAce(dealerSum, dealerAceCount);
-    yourSum = reduceAce(yourSum, yourAceCount);
-
-    canHit = false;
-    document.getElementById("hidden").src = "./cards/" + hidden + ".png";
-
-    let message = "";
-    if (yourSum > 21) {
-        message = "You Lose!";
-    }
-    else if (dealerSum > 21) {
-        message = "You win!";
-    }
-    //both you and dealer <= 21
-    else if (yourSum == dealerSum) {
-        message = "Tie!";
-    }
-    else if (yourSum > dealerSum) {
-        message = "You Win!";
-    }
-    else if (yourSum < dealerSum) {
-        message = "You Lose!";
-    }
-
-    document.getElementById("dealer-sum").innerText = dealerSum;
-    document.getElementById("your-sum").innerText = yourSum;
-    document.getElementById("results").innerText = message;
-}
+    // ...all obsolete single-player code removed...
 
 function getValue(card) {
     let data = card.split("-"); // "4-C" -> ["4", "C"]
