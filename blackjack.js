@@ -198,6 +198,19 @@ function startGame() {
         document.getElementById("hidden").src = "./cards/" + hidden + ".png";
         dealerSum = reduceAce(dealerSum, dealerAceCount);
         let results = "";
+        // Dealer result logic
+        let dealerResult = "";
+        if (dealerSum > 21) {
+            dealerResult = "Bust!";
+        } else {
+            dealerResult = `Sum: ${dealerSum}`;
+        }
+        // Display dealer sum and result
+        const dealerSumElem = document.getElementById("dealer-sum");
+        if (dealerSumElem) {
+            dealerSumElem.textContent = `${dealerSum} (${dealerResult})`;
+        }
+
         for (let p = 0; p < numPlayers; p++) {
             let sum = reduceAce(playerSums[p], playerAceCounts[p]);
             let msg = "";
@@ -211,6 +224,11 @@ function startGame() {
                 msg = "Win!";
             } else {
                 msg = "Lose!";
+            }
+            // Display result next to player's sum
+            const sumElem = document.getElementById(`player-sum-${p}`);
+            if (sumElem) {
+                sumElem.textContent = `Sum: ${sum} (${msg})`;
             }
             results += `${playerNames[p]}: ${msg} `;
         }
