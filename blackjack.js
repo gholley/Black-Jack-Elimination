@@ -74,8 +74,10 @@ function buildDeck() {
             let cardImg = document.createElement("img");
             let card = deck.pop();
             cardImg.src = "./cards/" + card + ".png";
+            cardImg.alt = card + " card";
             cardImg.onerror = function() {
                 this.src = "./cards/BACK.png";
+                this.alt = "Card back";
             };
             dealerSum += getValue(card);
             dealerAceCount += checkAce(card);
@@ -93,8 +95,10 @@ function buildDeck() {
                 let cardImg = document.createElement("img");
                 let card = deck.pop();
                 cardImg.src = "./cards/" + card + ".png";
+                cardImg.alt = card + " card";
                 cardImg.onerror = function() {
                     this.src = "./cards/BACK.png";
+                    this.alt = "Card back";
                 };
                 sum += getValue(card);
                 aceCount += checkAce(card);
@@ -141,8 +145,10 @@ function buildDeck() {
         let cardImg = document.createElement("img");
         let card = deck.pop();
         cardImg.src = "./cards/" + card + ".png";
+        cardImg.alt = card + " card";
         cardImg.onerror = function() {
             this.src = "./cards/BACK.png";
+            this.alt = "Card back";
         };
         playerSums[currentPlayer] += getValue(card);
         playerAceCounts[currentPlayer] += checkAce(card);
@@ -202,20 +208,7 @@ function buildDeck() {
         }
         document.getElementById("results").innerText = results;
     }
-    let yourSum = 0;
-    let yourAceCount = 0;
-    for (let i = 0; i < 2; i++) {
-        let cardImg = document.createElement("img");
-        let card = deck.pop();
-        cardImg.src = "./cards/" + card + ".png";
-        yourSum += getValue(card);
-        yourAceCount += checkAce(card);
-        document.getElementById("player-cards-0").append(cardImg);
-    }
-    document.getElementById("player-sum-0").textContent = `Sum: ${yourSum}`;
-
-    document.getElementById("hit").addEventListener("click", hit);
-    document.getElementById("stay").addEventListener("click", stay);
+    // ...removed legacy single-player dealing code...
 }
 
 function hit() {
